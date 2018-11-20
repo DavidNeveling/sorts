@@ -89,6 +89,8 @@ def customSortPopFront(list):
         listlist.append(merge(listA, listB))
     return listlist[0]
 
+# I read online about something called 'natural mergeSort'
+# Here's something I wrote after reading the first 2 sentences of its description
 def customSort(list):
     i = 0
     listlist = []
