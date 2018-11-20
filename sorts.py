@@ -4,7 +4,7 @@ def main():
     sys.setrecursionlimit(sys.getrecursionlimit()*2) # quick sort breaks the default limit with len(list) = 1000
 
     list = [random.randrange(1, 50) for i in range(8)]
-    funcList = [nativeSort, quickSort, mergeSort, radixSort, insertionSort, selectionSort]
+    funcList = [nativeSort, quickSort, mergeSort, radixSort, insertionSort, selectionSort, customSort, customSortPopFront]
     print("Checking for correctness\n")
     print("initial list")
     print(list)
@@ -43,6 +43,16 @@ def main():
         print(f.__name__)
         print("\ttime elapsed = " + str(end - start))
 
+    print("\nSemi-Sorted order\n")
+    list = [i%(size/20) for i in range(1, size+1)]
+    for f in funcList:
+        listB = list[:]
+        start = time.clock()
+        listB = f(listB)
+        end = time.clock()
+        print(f.__name__)
+        print("\ttime elapsed = " + str(end - start))
+
     print("\nReverse order\n")
     list = [size - i for i in range(1, size+1)]
     for f in funcList:
@@ -53,8 +63,75 @@ def main():
         print(f.__name__)
         print("\ttime elapsed = " + str(end - start))
 
+    print("\nSemi-Reverse order\n")
+    list = [(size - i)%(size/20) for i in range(1, size+1)]
+    for f in funcList:
+        listB = list[:]
+        start = time.clock()
+        listB = f(listB)
+        end = time.clock()
+        print(f.__name__)
+        print("\ttime elapsed = " + str(end - start))
+
+
 def nativeSort(list):
     return sorted(list)
+
+def customSortPopFront(list):
+    i = 0
+    listlist = []
+    while i < len(list):
+        sublist, i = customSortHelper(list, i)
+        listlist.append(sublist)
+    while len(listlist) > 1:
+        listA = listlist.pop(0)
+        listB = listlist.pop(0)
+        listlist.append(merge(listA, listB))
+    return listlist[0]
+
+def customSort(list):
+    i = 0
+    listlist = []
+    while i < len(list):
+        sublist, i = customSortHelper(list, i)
+        listlist.append(sublist)
+    while len(listlist) > 1:
+        listA = listlist.pop()
+        listB = listlist.pop()
+        listlist.append(merge(listA, listB))
+    return listlist[0]
+
+def customSortHelper(list, index):
+    newList = []
+    ascending = False
+    descending = False
+    stop = False
+    i = index + 1
+    prevVal = list[index]
+    newList.append(prevVal)
+    while i < len(list) and not stop:
+        if ascending:
+            if list[i] >= prevVal:
+                prevVal = list[i]
+                newList.append(prevVal)
+            else:
+                return (newList, i)
+        if descending:
+            if list[i] < prevVal:
+                prevVal = list[i]
+                newList.append(prevVal)
+            else:
+                newList.reverse()
+                return (newList, i)
+        if not ascending and not descending:
+            if list[i] >= prevVal:
+                ascending = True
+            if list[i] < prevVal:
+                descending = True
+            prevVal = list[i]
+            newList.append(prevVal)
+        i += 1
+    return (newList, len(list))
 
 # im stupid so i got this one off the internet
 def radixSort(list, base=10):
