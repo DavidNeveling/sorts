@@ -4,7 +4,7 @@ def main():
     sys.setrecursionlimit(sys.getrecursionlimit()*2) # quick sort breaks the default limit with len(list) = 1000
 
     list = [random.randrange(1, 50) for i in range(8)]
-    funcList = [nativeSort, quickSort, mergeSort, radixSort, insertionSort, selectionSort, customSort, customSortPopFront]
+    funcList = [nativeSort, quickSort, mergeSort, radixSort, insertionSort, selectionSort, customSort, customSortPopFront, customSortAuxList]
     print("Checking for correctness\n")
     print("initial list")
     print(list)
@@ -77,18 +77,6 @@ def main():
 def nativeSort(list):
     return sorted(list)
 
-def customSortPopFront(list):
-    i = 0
-    listlist = []
-    while i < len(list):
-        sublist, i = customSortHelper(list, i)
-        listlist.append(sublist)
-    while len(listlist) > 1:
-        listA = listlist.pop(0)
-        listB = listlist.pop(0)
-        listlist.append(merge(listA, listB))
-    return listlist[0]
-
 # I read online about something called 'natural mergeSort'
 # Here's something I wrote after reading the first 2 sentences of its description
 def customSort(list):
@@ -101,6 +89,35 @@ def customSort(list):
         listA = listlist.pop()
         listB = listlist.pop()
         listlist.append(merge(listA, listB))
+    return listlist[0]
+
+def customSortPopFront(list):
+    i = 0
+    listlist = []
+    while i < len(list):
+        sublist, i = customSortHelper(list, i)
+        listlist.append(sublist)
+    while len(listlist) > 1:
+        listA = listlist.pop(0)
+        listB = listlist.pop(0)
+        listlist.append(merge(listA, listB))
+    return listlist[0]
+
+def customSortAuxList(list):
+    i = 0
+    listlist = []
+    while i < len(list): # O(n)
+        sublist, i = customSortHelper(list, i)
+        listlist.append(sublist)
+    while len(listlist) > 1:
+        auxList = []
+        while len(listlist) > 1:
+            listA = listlist.pop()
+            listB = listlist.pop()
+            auxList.append(merge(listA, listB))
+        if len(listlist) != 0:
+            auxList.append(listlist.pop())
+        listlist = auxList
     return listlist[0]
 
 def customSortHelper(list, index):
@@ -134,6 +151,64 @@ def customSortHelper(list, index):
             newList.append(prevVal)
         i += 1
     return (newList, len(list))
+
+"""
+def customSortSwitch(list, index):
+    i = 0
+    listlist = []
+    reverseCount = 0
+    while i < len(list):
+        sublist, i, reverse = customSortHelper(list, i)
+        listlist.append(sublist)
+        reverseCount += reverse
+    if reverseCount > len(listlist) / 2:
+        while len(listlist) > 1:
+            listA = listlist.pop()
+            listB = listlist.pop()
+            listlist.append(merge(listA, listB))
+    else:
+        while len(listlist) > 1:
+            listA = listlist.pop()
+            listB = listlist.pop()
+            listlist.append(merge(listA, listB))
+    return listlist[0]
+
+def customSortSwitchHelper(list, index):
+    newList = []
+    ascending = False
+    descending = False
+    stop = False
+    i = index + 1
+    prevVal = list[index]
+    newList.append(prevVal)
+    while i < len(list) and not stop:
+        if ascending:
+            if list[i] >= prevVal:
+                prevVal = list[i]
+                newList.append(prevVal)
+            else:
+                return (newList, i, 0)
+        if descending:
+            if list[i] < prevVal:
+                prevVal = list[i]
+                newList.append(prevVal)
+            else:
+                newList.reverse()
+                return (newList, i, 1)
+        if not ascending and not descending:
+            if list[i] >= prevVal:
+                ascending = True
+            if list[i] < prevVal:
+                descending = True
+            prevVal = list[i]
+            newList.append(prevVal)
+        i += 1
+    reverse = 0
+    if descending:
+        newList.reverse()
+        reverse = 1
+    return (newList, len(list), reverse)
+"""
 
 # im stupid so i got this one off the internet
 def radixSort(list, base=10):
