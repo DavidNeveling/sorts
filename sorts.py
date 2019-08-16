@@ -1,10 +1,11 @@
 import random, time, sys
 def main():
 
-    sys.setrecursionlimit(sys.getrecursionlimit()*2) # quick sort breaks the default limit with len(list) = 1000
+    sys.setrecursionlimit(sys.getrecursionlimit()*4) # quick sort breaks the default limit with len(list) = 1000
 
-    list = [random.randrange(1, 50) for i in range(8)]
-    funcList = [nativeSort, quickSort, mergeSort, radixSort, insertionSort, selectionSort, customSort, customSortPopFront, customSortAuxList]
+    list = [1, 2, 3, 4, 3, 2]
+    funcList = [nativeSort, quickSort, mergeSort, radixSort, insertionSort, selectionSort, customSort, customSortPopFront, customSortAuxList, integerHashSort]
+    # funcList = [nativeSort, mergeSort, radixSort, customSortPopFront, customSortAuxList, integerHashSort]
     print("Checking for correctness\n")
     print("initial list")
     print(list)
@@ -150,6 +151,8 @@ def customSortHelper(list, index):
             prevVal = list[i]
             newList.append(prevVal)
         i += 1
+    if descending:
+        newList.reverse()
     return (newList, len(list))
 
 """
@@ -209,6 +212,26 @@ def customSortSwitchHelper(list, index):
         reverse = 1
     return (newList, len(list), reverse)
 """
+
+def integerHashSort(array):
+    smallest = float('inf')
+    largest = -float('inf')
+    for value in array:
+        if value < smallest:
+            smallest = value
+        if value > largest:
+            largest = value
+    hash = [0 for i in range(largest - smallest + 1)]
+    for value in array:
+        hash[value - smallest] += 1
+    retList = []
+    for i in range(len(hash)):
+        while hash[i] > 0:
+            retList.append(i + smallest)
+            hash[i] -= 1
+
+    return retList
+
 
 # im stupid so i got this one off the internet
 def radixSort(list, base=10):
