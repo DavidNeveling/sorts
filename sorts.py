@@ -4,8 +4,8 @@ def main():
     sys.setrecursionlimit(sys.getrecursionlimit()*4) # quick sort breaks the default limit with len(list) = 1000
 
     list = [1, 2, 3, 4, 3, 2]
-    funcList = [nativeSort, quickSort, mergeSort, radixSort, insertionSort, selectionSort, customSort, customSortPopFront, customSortAuxList, integerHashSort]
-    # funcList = [nativeSort, mergeSort, radixSort, customSortPopFront, customSortAuxList, integerHashSort]
+    # funcList = [nativeSort, quickSort, mergeSort, radixSort, insertionSort, selectionSort, customSort, customSortPopFront, customSortAuxList, integerHashSort]
+    funcList = [nativeSort, mergeSort, radixSort, customSortPopFront, customSortAuxList, integerHashSort]
     print("Checking for correctness\n")
     print("initial list")
     print(list)
@@ -21,7 +21,7 @@ def main():
         print("\ttime elapsed = " + str(end - start))
 
     print("\nTime Analysis")
-    size = 1000
+    size = 100000
     print("list size: " + str(size))
 
     print("\nRandom order\n")
@@ -221,9 +221,9 @@ def integerHashSort(array):
             smallest = value
         if value > largest:
             largest = value
-    hash = [0 for i in range(largest - smallest + 1)]
+    hash = [0 for _ in range(int(largest - smallest + 1))]
     for value in array:
-        hash[value - smallest] += 1
+        hash[int(value - smallest)] += 1
     retList = []
     for i in range(len(hash)):
         while hash[i] > 0:
@@ -238,7 +238,7 @@ def radixSort(list, base=10):
     def listToBuckets(list, base, iteration):
         buckets = [[] for x in range(base)]
         for number in list:
-            digit = (number // (base ** iteration)) % base
+            digit = int((number // (base ** iteration)) % base)
             buckets[digit].append(number)
         return buckets
     def bucketsToList(buckets):
@@ -257,7 +257,7 @@ def radixSort(list, base=10):
 def mergeSort(list):
     if len(list) <= 1:
         return list
-    m = len(list)/2
+    m = int(len(list)/2)
     return merge(mergeSort(list[0:m]), mergeSort(list[m:len(list)]))
 
 def merge(sortedListA, sortedListB):
