@@ -13,9 +13,9 @@ def main():
 
     for f in funcList:
         listB = list[:]
-        start = time.clock()
+        start = time.time()
         listB = f(listB)
-        end = time.clock()
+        end = time.time()
         print(f.__name__)
         print("\t"+str(listB))
         print("\ttime elapsed = " + str(end - start))
@@ -28,9 +28,9 @@ def main():
     list = [random.randrange(1, size) for i in range(size)]
     for f in funcList:
         listB = list[:]
-        start = time.clock()
+        start = time.time()
         listB = f(listB)
-        end = time.clock()
+        end = time.time()
         print(f.__name__)
         print("\ttime elapsed = " + str(end - start))
 
@@ -38,9 +38,9 @@ def main():
     list = [i for i in range(1, size+1)]
     for f in funcList:
         listB = list[:]
-        start = time.clock()
+        start = time.time()
         listB = f(listB)
-        end = time.clock()
+        end = time.time()
         print(f.__name__)
         print("\ttime elapsed = " + str(end - start))
 
@@ -48,9 +48,9 @@ def main():
     list = [i%(size/20) for i in range(1, size+1)]
     for f in funcList:
         listB = list[:]
-        start = time.clock()
+        start = time.time()
         listB = f(listB)
-        end = time.clock()
+        end = time.time()
         print(f.__name__)
         print("\ttime elapsed = " + str(end - start))
 
@@ -58,9 +58,9 @@ def main():
     list = [size - i for i in range(1, size+1)]
     for f in funcList:
         listB = list[:]
-        start = time.clock()
+        start = time.time()
         listB = f(listB)
-        end = time.clock()
+        end = time.time()
         print(f.__name__)
         print("\ttime elapsed = " + str(end - start))
 
@@ -68,9 +68,9 @@ def main():
     list = [(size - i)%(size/20) for i in range(1, size+1)]
     for f in funcList:
         listB = list[:]
-        start = time.clock()
+        start = time.time()
         listB = f(listB)
-        end = time.clock()
+        end = time.time()
         print(f.__name__)
         print("\ttime elapsed = " + str(end - start))
 
